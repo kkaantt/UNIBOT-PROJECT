@@ -1,0 +1,693 @@
+//BANNER HEIGHT
+var windowWidth = window.innerWidth;
+var hash = window.location.hash.substr(1);
+$(document).ready(function () {
+    getImages();
+    var wh = $(window).innerHeight(), hh = $("header").innerHeight();
+    /*
+    @05.09.2019 by Altug
+     */
+    //var bannerH = (isMobile || isTablet) ? '250px' : wh - hh;
+    //var bannerH = !isMobile ? (!isTablet || windowWidth>990) ? wh - hh : '350px' : '250px';
+    //$(".bannerH").css('height', bannerH);
+    resolveRichContentOwl();
+    resolveDataTables();
+
+    $.each($('.banner-item.owl-item.bannerH'), function() {
+        let mobile = $(this).data('mobile');
+        let desktop = $(this).data('desktop');
+        let bgImage = (windowWidth < 600 && typeof  mobile !== 'undefined') ? mobile[0] : desktop[0];
+        $(this).css('background-image', 'url('+ bgImage+')');
+
+    });
+
+    if(hash){
+        $('a[href="#'+hash+'"]').closest('ul[role="tablist"]').children('li').removeClass('active')
+        $('a[href="#'+hash+'"]').parent().addClass('active')
+        $('div#'+hash).closest('div.tab-content').children('div[role="tabpanel"]').removeClass('active in')
+        $('div#'+hash).addClass('active in')
+    }
+
+
+});
+window.addEventListener('load', function () {
+    $('.loading-container').addClass('loaded');
+    setTimeout(function() {
+        //$('.news-card').matchHeight({byRow: false});
+        //$('.news-card-content').matchHeight({byRow: false});
+        //$('.unit-card-caption a').matchHeight({byRow:false});
+        //$('.news-card-title').matchHeight();
+        //$('.match-module').matchHeight();
+        $('.staff-container').matchHeight();
+        /*let height_ = $('.card-container.news').innerHeight() - 85;
+        if(height_ > 0) {
+            $('.event-card').css({
+                'height': height_,
+                'overflow': 'hidden'
+            });
+        }*/
+    }, 750);
+});
+
+//EKLENECEK
+/*const makeThumb = function (image,w = 300,h = 200,process = 'resize') {
+    if(typeof image === 'undefined')
+        image = '/assets/img/placeholder.jpg';
+
+    let url = '/thumbnail?src=' + image + '&w=' + w + '&h=' + h+ '&p=' + process
+    return url
+
+}*/
+
+$(function(){
+
+    $('#myTabs a').click(function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+    })
+
+});
+
+/* HOMEPAGE SLIDER */
+$('.owl-carousel.owl-theme.main-slider').owlCarousel({
+    items: 1,
+    autoplay: true,
+    autoplayTimeout: 8000,
+    /*autoplayHoverPause: true,*/
+    loop:true
+}).mouseover(function(){
+    $(this).trigger('stop.owl.autoplay');
+}).mouseleave(function(){
+    $(this).trigger('play.owl.autoplay',[1000]);
+});
+
+
+
+//EKLENECEK
+/* HOMEPAGE SLIDER END*/
+
+/* HEADER SLIDER */
+$.each($('.owl-carousel.owl-header') , function(){
+
+        let loop = $(this).data('loop');
+
+        $(this).owlCarousel({
+            items: 1,
+            autoplay: true,
+            autoplayTimeout: 2500,
+            loop: loop,
+            dots:false
+        });
+    }
+);
+//OWL HOME
+
+$('.home-package-owl').owlCarousel({
+    loop: ($('.home-package-owl .item').length > 3),
+    margin: 30,
+    dots: false,
+    nav:false,
+    autoplay: true,
+    autoplayTimeout: 5000,
+    responsiveClass: true,
+    responsive: {
+        0: {
+            items: 1,
+            dots: false,
+            autoplay: false,
+            loop:false
+        },
+        768: {
+            items: 2,
+            dots: true
+        },
+        1024: {
+            items: 1
+        },
+        1200:{
+            items:2
+        },
+        1366: {
+            items: 3
+        }
+    }
+}); //EKLENECEK
+
+//QUICK NOTICE
+/* @06.09.2019 by Altug */
+$('.quick-owl').owlCarousel({
+    loop: false,
+    stagePadding: 0,
+    dots: false,
+    nav:false,
+    autoplay: false,
+    autoplayTimeout: 5000,
+    responsiveClass: true,
+    touchDrag  : false,
+    mouseDrag  : false,
+    responsive: {
+        0: {
+            items: 1,
+            dots: true
+        },
+        768: {
+            items: 1,
+            dots: false
+        },
+        1024: {
+            items: 3
+        },
+        1366: {
+            items: 3
+        }
+    }
+}); //EKLENECEK
+//OWL NEWS
+$('.news-owl').owlCarousel({
+    loop: ($('.news-owl .item').length > 3),
+    margin: 30,
+    stagePadding: 15,
+    dots: false,
+    nav:false,
+    autoplay: true,
+    autoplayTimeout: 5000,
+    responsiveClass: true,
+    responsive: {
+        0: {
+            items: 1,
+            dots: false
+        },
+        768: {
+            items:2,
+            dots: false
+        },
+        960: {
+            items:2
+        },
+        1024: {
+            items: 2
+        },
+        1280: {
+            items: 3
+        },
+        1366: {
+            items: 3
+        }
+    }
+}); //EKLENECEK
+//OWL COUNTER
+$('.home-counter-owl').owlCarousel({
+    loop: false,
+    margin: 15,
+    stagePadding: 15,
+    dots: false,
+    nav:false,
+    autoplay: true,
+    autoplayTimeout: 5000,
+    responsiveClass: true,
+    responsive: {
+        0: {
+            items: 2,
+            dots: true
+        },
+        768: {
+            items: 3,
+            dots: true
+        },
+        1024: {
+            items: 4,
+            dots: true
+        },
+        1280: {
+            items: 4
+        },
+        1366: {
+            items: 4
+        }
+    }
+}); //EKLENECEK
+//OWL NAVIGATION
+$(".carousel-navigation.next").click(function() {
+    var target = $(this).data('target');
+    $(target).trigger('next.owl.carousel');
+});
+$(".carousel-navigation.prev").click(function() {
+    var target = $(this).data('target');
+    $(target).trigger('prev.owl.carousel');
+});
+// SIDEBAR accordionSide
+if ($(window).width() < 1000) {
+    if ($('#accordionSide').hasClass('in')) {
+        $('#accordionSide').removeClass('in')
+    }
+}
+
+function resolveRichContentOwl() {
+
+    $.each($('.rich_content_owl'),function () {
+
+
+        let settings = $(this).data('settings');
+
+        settings.margin = settings.margin ? parseInt(settings.margin) : 10;
+        $(this).owlCarousel(settings);
+
+    });
+
+
+}
+function resolveDataTables() {
+
+    $.each($('.content_input_data_table'),function () {
+
+        $(this).dataTable( {
+            language: {
+                url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Turkish.json",
+
+            },
+            order: [[ 0, 'desc' ]]
+        });
+    });
+
+
+}
+
+
+$(document).on('click','.lesson_card', function() {
+    let lang = $('html').attr('lang');
+    let lesson_data = $(this).data('lesson-data');
+    let lesson_code = lesson_data.code;
+
+    //bölümlere özel ders bilgisi için bölüm kodunu gönderiyoruz
+    let circulum_link = "";
+    if (typeof $(this).data('circulum-id') !== "undefined"){
+        let circulum_id = $(this).data('circulum-id');
+        circulum_link = '/' + circulum_id;
+
+    }else{
+        circulum_link = "";
+    }
+
+    let lessonModal = $('#lessonModal');
+    lesson_data.lang = $('html').attr('lang')
+    // console.log(lesson_data);
+
+    $.get('/get-lesson-ects/' + lesson_code + circulum_link, function (response) {
+        console.log(response);
+        console.log(lesson_code);
+        console.log(circulum_link);
+        let link = (response != 0) ? response : 'javascript:void(0)';
+        let button = $('.modal-footer .ects_link', lessonModal);
+        button.attr('href', link);
+        if(response == 0 && !button.hasClass('disabled')) {
+            button.addClass('disabled');
+        }else {
+            button.removeClass('disabled');
+        }
+    })
+
+    $.post('/get-lesson-info', {_token: $('.lesson_token').val(), data: lesson_data }, function(response) {
+
+        $('.modal-body > .table-responsive',lessonModal).html(response);
+        $('.modal-footer > .ects_link').show(); // seçmelide yapılan gizleme işlemi sebebiyle tekrar göster yapıldı // 28.09.2023 - Furkan
+    })
+    lessonModal.modal('toggle');
+
+
+    /*    let data = {
+
+            lesson: lesson_data,
+        }*/
+
+
+
+});
+
+$(document).on('click','.elective_lessons_list', function() {
+    let lessonModal = $('#lessonModal'),
+        lessons = $(this).data('lessons');
+        circulum_id = $(this).data('circulum-id');
+
+    let data = {
+        lang: $('html').attr('lang'),
+        lessons: lessons,
+        circulum_id: circulum_id
+    }
+
+    $.post('/get-elective-lessons', {_token: $('.lesson_token').val(), data: data}, function(response) {
+
+        $('.modal-body > .table-responsive',lessonModal).html(response);
+        /*
+        * 28.09.2023 - Furkan
+        * seçmeli dersleri seçince liste geliyor, tek bir ders içeriği
+        * olmadığı için buton işlevsiz kalıyordu, bu yüzden seçmelide gizleniyor.
+        * */
+        $('.modal-footer > .ects_link').hide();
+    })
+    lessonModal.modal('toggle');
+
+
+
+});
+/*
+//hover özelliği kaldırıldı, click ile çalışıyor.
+$('.tab-hover[data-toggle="tab-hover"] > li > a').hover( function(){
+    $(this).tab('show');
+}); //EKLENECEK
+*/
+
+
+$(document).ready(function(){
+    $("[data-toggle='tooltip']").tooltip();
+    var footerLogo = $('.footer-logo img').attr('src');
+    $('#mm-menu').mmenu({
+        offCanvas: {
+            position: 'right'
+        },
+        counters: false,
+        navbar  : {
+            /*title   : 'Atılım Üniversitesi',*/
+            title : false
+        },
+        navbars : [
+            /*{
+                position    : 'top',
+                content     : [
+                    '<a href="#"><img class="img-responsive" src="'+ footerLogo +'" alt="Atılım Üniversitesi"></a>'
+                ]
+            },*/
+            {
+                position: 'bottom',
+                content: [
+                    '<a class="fa-brands fa-instagram" target="_blank" href="' + instagram_url + '"></a>',
+                    '<a class="fa-brands fa-facebook" target="_blank" href="' + facebook_url + '"></a>',
+                    '<a class="fa-brands fa-x-twitter" target="_blank" href="' + twitter_url + '"></a>',
+                    '<a class="fa-brands fa-linkedin" target="_blank" href="' + linkedin_url + '"></a>',
+                ]
+            }
+        ]
+    });
+
+    let gereksiz_is = [];
+    let a = [];
+    lessObj = {};
+    if(document.getElementById('technical_lessons')) {
+        let myList = document.getElementById('technical_lessons').getElementsByClassName("lesson_card");
+        for (let i = 0; i < myList.length; i++) {
+
+            let code = $(myList[i]).data('lesson-code');
+            lessObj[code] = myList[i].outerHTML;
+
+        }
+    }
+    let keys = Object.keys(lessObj).sort();
+    let len = keys.length;
+    $('#technical_lessons').empty();
+    for (i = 0; i < len; i++) {
+        k = keys[i];
+        $('#technical_lessons').append(lessObj[k]);
+        //console.log(k + ':' , lessObj[k]);
+    }
+
+});
+var fixedContent = $(".side-fixed-menu-content").innerWidth();
+$(".side-fixed-menu").css('right',-fixedContent);
+$(document).on('mouseenter', '.side-fixed-menu', function() {
+
+    if (!$(this).hasClass('hover'))
+        $(this).addClass('hover')
+}).on('mouseleave', '.side-fixed-menu', function() {
+    if ($(this).hasClass('hover'))
+        $(this).removeClass('hover')
+}).on('click', '.close-fixed-menu', function() {
+
+    if ($('.side-fixed-menu').hasClass('hover'))
+        $('.side-fixed-menu').removeClass('hover')
+});
+
+$(document).on('click','.toggle_search, .overlay_search', function () {
+    $('.general-search').toggleClass('open_search');
+});
+
+
+$(document).on('click', '.search_paginate', function(e) {
+    e.preventDefault();
+    let form = $('.search_form');
+
+    let request = {
+        query : $(this).data('query'),
+        content_type : $(this).data('content-type'),
+        _token: $(this).data('_token'),
+
+    };
+    $('input[name="query"]',form).val(request.query);
+    $('input[name="content_type"]',form).val(request.content_type);
+    let page = $(this).data('page');
+    action = $(this).data('route') + '?page=' + page;
+
+    form.attr('action', action);
+    /*form.attr('method', 'POST');
+    console.log(form.serialize())*/
+    form.submit();
+
+});
+
+$(document).on('keypress', '.search_input', function(e) {
+    if(e.which === 13){
+
+        e.preventDefault();
+        let form = $('.search_form');
+        let content_type = $('input[name="content_type"]:checked',  form).val();
+        if(content_type === 'person') {
+            //'https://atis.atilim.edu.tr/rehber?formType=search&Personel[name]=Y%C4%B1lmaz&Personel[surname]=Kaptan&Personel[phone]='
+            let url = 'https://atacs.atilim.edu.tr/Rehber?formType=search&'
+
+
+            let val = $(this).val().split(' ');
+            let query = '';
+
+            if(val.length > 1) {
+
+                if(val[0])
+                {
+                    let surname = val.pop();
+                    query += 'Personel[name]=' + val.join('+') + '&';
+                    query += 'Personel[surname]=' + surname;
+
+                }
+            } else {
+                if(val[0])
+                    query += 'Personel[name]=' + val;
+            }
+
+            if(query) {
+                let atis_search_url = url + query;
+                window.open(atis_search_url, '_blank');
+                $(this).val('')
+            }
+
+        }else {
+            form.submit();
+        }
+
+    }
+
+
+});
+
+function getImages() {
+    $.each($('img[data-src]'), function() {
+        let src = $(this).data('src');
+        if(typeof src !== 'undefined') {
+            $(this).attr('src',src);
+
+        }
+
+    });
+}
+
+$(document).on('click', '.donation_books', function(e) {
+    e.preventDefault();
+
+    let books = $(this).data('books');
+    let out = '';
+    books.forEach(function (obj) {
+        out += '<tr>';
+        out += '<td>' + obj.book + '</td>';
+        out += '<td>' + obj.author + '</td>';
+        out += '<td>' + obj.bookDate + '</td>';
+        out += '<td>' + obj.donationMonth + '</td>';
+        out += '<td>' + obj.donationYear + '</td>';
+        out += '</tr>';
+    });
+
+    $('#booksModal tbody').html(out);
+    $('#booksModal .modal-title').html($(this).data('name'));
+    $('#booksModal').modal('toggle');
+
+});
+
+$(document).on('click', '.donor_cv', function(e) {
+    e.preventDefault();
+
+
+    $('#CvModal .modal-body').html($(this).data('cv'));
+    $('#CvModal .modal-title').html($(this).data('name'));
+
+
+    $('#CvModal').modal('toggle');
+});
+
+var myElement = document.querySelector("header");
+var headroom = new Headroom(myElement, {
+    "offset": 100,
+    "tolerance": 5,
+    "classes": {
+        "initial": "animated",
+        "pinned": "slideDown",
+        "unpinned": "slideUp"
+    }
+});
+headroom.init();
+headroom.destroy();
+
+
+$(document).ready(function() {
+    var el = $('.owl-carousel-2');
+
+    var carousel;
+    var carouselOptions = {
+        margin: 0,
+        nav: false,
+        dots: false,
+        mouseDrag: false,
+        touchDrag: false,
+        slideBy: 'page',
+        responsive: {
+            0: {
+                items: 2,
+                rows: 2 //custom option not used by Owl Carousel, but used by the algorithm below
+            },
+            768: {
+                items: 2,
+                rows: 2 //custom option not used by Owl Carousel, but used by the algorithm below
+            },
+            991: {
+                items: 2,
+                rows: 2 //custom option not used by Owl Carousel, but used by the algorithm below
+            }
+        }
+    };
+
+    //Taken from Owl Carousel so we calculate width the same way
+    var viewport = function() {
+        var width;
+        if (carouselOptions.responsiveBaseElement && carouselOptions.responsiveBaseElement !== window) {
+            width = $(carouselOptions.responsiveBaseElement).width();
+        } else if (window.innerWidth) {
+            width = window.innerWidth;
+        } else if (document.documentElement && document.documentElement.clientWidth) {
+            width = document.documentElement.clientWidth;
+        } else {
+            console.warn('Can not detect viewport width.');
+        }
+        return width;
+    };
+
+    var severalRows = false;
+    var orderedBreakpoints = [];
+    for (var breakpoint in carouselOptions.responsive) {
+        if (carouselOptions.responsive[breakpoint].rows > 1) {
+            severalRows = true;
+        }
+        orderedBreakpoints.push(parseInt(breakpoint));
+    }
+
+    //Custom logic is active if carousel is set up to have more than one row for some given window width
+    if (severalRows) {
+        orderedBreakpoints.sort(function (a, b) {
+            return b - a;
+        });
+        var slides = el.find('[data-slide-index]');
+        var slidesNb = slides.length;
+        if (slidesNb > 0) {
+            var rowsNb;
+            var previousRowsNb = undefined;
+            var colsNb;
+            var previousColsNb = undefined;
+
+            //Calculates number of rows and cols based on current window width
+            var updateRowsColsNb = function () {
+                var width =  viewport();
+                for (var i = 0; i < orderedBreakpoints.length; i++) {
+                    var breakpoint = orderedBreakpoints[i];
+                    if (width >= breakpoint || i == (orderedBreakpoints.length - 1)) {
+                        var breakpointSettings = carouselOptions.responsive['' + breakpoint];
+                        rowsNb = breakpointSettings.rows;
+                        colsNb = breakpointSettings.items;
+                        break;
+                    }
+                }
+            };
+
+            var updateCarousel = function () {
+                updateRowsColsNb();
+
+                //Carousel is recalculated if and only if a change in number of columns/rows is requested
+                if (rowsNb != previousRowsNb || colsNb != previousColsNb) {
+                    var reInit = false;
+                    if (carousel) {
+                        //Destroy existing carousel if any, and set html markup back to its initial state
+                        carousel.trigger('destroy.owl.carousel');
+                        carousel = undefined;
+                        slides = el.find('[data-slide-index]').detach().appendTo(el);
+                        el.find('.fake-col-wrapper').remove();
+                        reInit = true;
+                    }
+
+
+                    //This is the only real 'smart' part of the algorithm
+
+                    //First calculate the number of needed columns for the whole carousel
+                    var perPage = rowsNb * colsNb;
+                    var pageIndex = Math.floor(slidesNb / perPage);
+                    var fakeColsNb = pageIndex * colsNb + (slidesNb >= (pageIndex * perPage + colsNb) ? colsNb : (slidesNb % colsNb));
+
+                    //Then populate with needed html markup
+                    var count = 0;
+                    for (var i = 0; i < fakeColsNb; i++) {
+                        //For each column, create a new wrapper div
+                        var fakeCol = $('<div class="fake-col-wrapper"></div>').appendTo(el);
+                        for (var j = 0; j < rowsNb; j++) {
+                            //For each row in said column, calculate which slide should be present
+                            var index = Math.floor(count / perPage) * perPage + (i % colsNb) + j * colsNb;
+                            if (index < slidesNb) {
+                                //If said slide exists, move it under wrapper div
+                                slides.filter('[data-slide-index=' + index + ']').detach().appendTo(fakeCol);
+                            }
+                            count++;
+                        }
+                    }
+                    //end of 'smart' part
+
+                    previousRowsNb = rowsNb;
+                    previousColsNb = colsNb;
+
+                    if (reInit) {
+                        //re-init carousel with new markup
+                        carousel = el.owlCarousel(carouselOptions);
+                    }
+                }
+            };
+
+            //Trigger possible update when window size changes
+            $(window).on('resize', updateCarousel);
+
+            //We need to execute the algorithm once before first init in any case
+            updateCarousel();
+        }
+    }
+
+    //init
+    carousel = el.owlCarousel(carouselOptions);
+});
